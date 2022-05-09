@@ -20,6 +20,13 @@ const isValid = function(value) {
     return true
  }
 
+ const isValidPincode = function(value) {
+    const dv = /^[1-9]{1}[0-9]{2}\s{0,1}[0-9]{3}$/; 
+    if(typeof value !== 'string') return false
+    if(dv.test(value)=== false) return false
+    return true
+ }
+
  const isValidTitle = function(title) {
      //console.log(['Mr','Mrs','Miss'].includes(title));
      return ['Mr','Mrs','Miss'].includes(title)
@@ -43,11 +50,5 @@ const isValidPhone = function(mobileNumber) {
  }
 
 
+module.exports = { isValid, isValid2, isValidRequestBody, isValidTitle, isValidEmail, isValidPhone, isValidPassword , isValidPincode}
 
- module.exports.isValid = isValid
- module.exports.isValid2 = isValid2
- module.exports.isValidRequestBody = isValidRequestBody
- module.exports.isValidTitle = isValidTitle
- module.exports.isValidEmail = isValidEmail
- module.exports.isValidPhone = isValidPhone
- module.exports.isValidPassword = isValidPassword

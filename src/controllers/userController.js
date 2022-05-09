@@ -59,12 +59,12 @@ const createUser = async function(req, res) {
         }
 
         if(!validator.isValid(email)) {
-            res.status(400).send({status: false , message: 'Email number is required'})
+            res.status(400).send({status: false , message: 'Email is required'})
             return
         }
 
         if(!validator.isValidEmail(email)) {
-            res.status(400).send({status: false , message: 'Email number is invalid'})
+            res.status(400).send({status: false , message: 'Email is invalid'})
             return
         }
 
@@ -86,22 +86,25 @@ const createUser = async function(req, res) {
 
         
 
-        if(!validator.isValid2(address.street)){
+        if(address.street && !validator.isValid2(address.street)){
             res.status(400).send({status: false , message: 'Enter a valid Street'})
             return
         }
 
-        if(!validator.isValid2(address.city)){
+        if(address.city && !validator.isValid2(address.city)){
             res.status(400).send({status: false , message: 'Enter a valid city name'})
             return
         }
 
-        
+        if(address.pincode && !validator.isValidPincode(address.pincode)){
+            res.status(400).send({status: false , message: 'Enter a valid city pincode'})
+            return
+        }
         
         data = { title, name, phone, email, password, address }
 
         let userData = await userModel.create(data)
-        res.status(201).send({ status:true, data:userData })
+        res.status(201).send({ status:true, message: 'Success', data:userData })
 
     } catch (error) {
         res.status(500).send({status:false , msg: error.message});
@@ -145,10 +148,10 @@ try{
     }
 
     if(email && password) {
-        let user = await userModel.findOne({email:data.email , password:data.password})
+        let user = await userModel.findOne({email: email , password: password})
          
         if(!user){
-            res.status(400).send({status:false,msg:"Invalid Email or Password"})
+           return  res.status(400).send({status:false,msg:"Invalid Email or Password"})
         }
 
          let token = jwt.sign(

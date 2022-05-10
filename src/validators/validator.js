@@ -1,5 +1,6 @@
 //========================= Validators =========================
 
+const mongoose = require("mongoose")
 
 const isValidRequestBody = function(requestBody) {
     return Object.keys(requestBody).length > 0
@@ -49,6 +50,38 @@ const isValidPhone = function(mobileNumber) {
      return passRE.test(pass)
  }
 
+ const isValidObjectId = (objectId) => {
+    if (mongoose.Types.ObjectId.isValid(objectId)) return true;
+    return false;
+  };
 
-module.exports = { isValid, isValid2, isValidRequestBody, isValidTitle, isValidEmail, isValidPhone, isValidPassword , isValidPincode}
+  const isValidISBN = (ISBN) => {
+    let reISBN = /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/
+    return  reISBN.test(ISBN)
+  }
+
+
+ const check = (value) => {
+    return value.every(ele => (typeof(ele) === "string"))
+}
+
+// const removeWhiteSpcAndEmpStr = (subArr) => {
+//     if (Array.isArray(subArr)) {
+//         let arr=[];
+//         for (let i = 0; i < subArr.length; i++) {
+//                 if(subArr[i].trim().length>0)
+//             arr.push(subArr[i].toLowerCase().trim())
+//         }
+//         return [...arr];
+//     }
+// }
+
+const releaseFormat = (releasedAt) => {
+    let reAt = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;// YYYY-MM-DD
+    return reAt.test(releasedAt)
+}
+
+
+
+module.exports = { isValid, isValid2, isValidRequestBody, isValidTitle, isValidEmail, isValidPhone, isValidPassword , isValidPincode, isValidObjectId, isValidISBN, check, releaseFormat}
 

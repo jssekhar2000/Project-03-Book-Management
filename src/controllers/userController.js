@@ -13,7 +13,7 @@ const createUser = async function(req, res) {
         let data = req.body
      
         if(!validator.isValidRequestBody(data)) {
-            res.status(400).send({status: false , Message: 'Invalid request parameters. Please provide intern details'})
+            res.status(400).send({status: false , Message: 'Invalid request parameters. Please provide User details'})
             return
         }
 
@@ -104,7 +104,7 @@ const createUser = async function(req, res) {
         data = { title, name, phone, email, password, address }
 
         let userData = await userModel.create(data)
-        res.status(201).send({ status:true, message: 'Success', data:userData })
+        res.status(201).send({ status:true, message: 'Success', data:{userData} })
 
     } catch (error) {
         res.status(500).send({status:false , msg: error.message});
@@ -163,7 +163,7 @@ try{
                  "functionUp-Uranium" 
                  )
                  res.header("x-api-key" , token)
-                 res.status(200).send({status:true , msg:"login Success" , data:token})
+                 res.status(200).send({status:true , msg:"login Success" , data:{token} })
      }
 }
 catch(error){

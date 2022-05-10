@@ -1,9 +1,7 @@
 //===========================
-
-const mongoose = require('mongoose');
 const jwt = require("jsonwebtoken");
-const userModel = require("../models/userModel");
-const ObjectId = mongoose.Types.ObjectId
+
+
 
 ///--------------- middleware for token verification 
 //--------- Authentication
@@ -18,7 +16,7 @@ let authentication = function (req , res , next){
         if(!token) return res.status(403).send({message: "token must be present" })
         
         // perforing this operation to decode the token
-        let decodedToken = jwt.verify( token , "functionup-uranium")
+        let decodedToken = jwt.verify( token , "functionUp-Uranium")
         
         // if returned decoded token is undefined
         if(!decodedToken){
@@ -34,4 +32,6 @@ let authentication = function (req , res , next){
     }
 
 }
+
+module.exports.authentication = authentication
 

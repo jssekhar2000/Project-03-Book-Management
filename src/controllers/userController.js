@@ -115,7 +115,7 @@ const createUser = async function(req, res) {
 
 //=======================Login user=================================
 
-const loginUser = async (req,res) => {
+const loginUser = async (req, res) => {
 
 try{
      let data = req.body

@@ -12,9 +12,9 @@ const bookSchema = new mongoose.Schema(
 
         ISBN: {type:String , required:true , trim:true , unique:true },
 
-        category: {type:String , required:true , trim:true },
+        category: {type:String , required:true , trim:true , lowercase: true},
 
-        subcategory: [{type:String , required:true , trim:true }],
+        subcategory: [{type:String , required:true , trim:true , lowercase: true }],
 
         reviews: {type:Number, default: 0 },
 

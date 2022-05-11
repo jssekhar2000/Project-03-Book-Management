@@ -25,7 +25,7 @@ const createUser = async function(req, res) {
 
         }
 
-        if(!validator.isValidTitle(title)) {
+        if(!validator.isValidTitle(title.trim())) {
             res.status(400).send({status: false , message: 'Title Must be of these values [Mr, Mrs, Miss]'})
             return
         }
@@ -35,10 +35,15 @@ const createUser = async function(req, res) {
             return
         }
 
-        if(!validator.isValid2(name)) {
+        if(!validator.isValid2(name.trim())) {
             res.status(400).send({status: false , message: 'Name is not a valid name'})
             return
         }
+        
+        let validString = /\d/;
+        if(validString.test(name.trim())) 
+            return res.status(400).send({ status: false, msg: "Name must be valid it should not contains numbers" });
+
 
         if(!validator.isValid(phone)) {
             res.status(400).send({status: false , message: 'Phone number is required'})
@@ -46,7 +51,7 @@ const createUser = async function(req, res) {
 
         }
 
-        if(!validator.isValidPhone(phone)) {
+        if(!validator.isValidPhone(phone.trim())) {
             res.status(400).send({status: false , message: 'Phone number is not a valid'})
             return
 
@@ -63,7 +68,7 @@ const createUser = async function(req, res) {
             return
         }
 
-        if(!validator.isValidEmail(email)) {
+        if(!validator.isValidEmail(email.trim())) {
             res.status(400).send({status: false , message: 'Email is invalid'})
             return
         }
@@ -79,25 +84,29 @@ const createUser = async function(req, res) {
             return
         }
 
-        if(!validator.isValidPassword(password)){
+        if(!validator.isValidPassword(password.trim())){
             res.status(400).send({status: false , message:'It is not valid password'})
             return
         }
 
         
 
-        if(address.street && !validator.isValid2(address.street)){
+        if(address.street && !validator.isValid2(address.street.trim())){
             res.status(400).send({status: false , message: 'Enter a valid Street'})
             return
         }
 
-        if(address.city && !validator.isValid2(address.city)){
+        if(address.city && !validator.isValid2(address.city.trim())){
             res.status(400).send({status: false , message: 'Enter a valid city name'})
             return
         }
 
-        if(address.pincode && !validator.isValidPincode(address.pincode)){
-            res.status(400).send({status: false , message: 'Enter a valid city pincode'})
+        if(validString.test(address.city.trim())) 
+            return res.status(400).send({ status: false, msg: "City name must be valid it should not contains numbers" });
+
+
+        if(address.pincode && !validator.isValidPincode(address.pincode.trim())){
+            res.status(400).send({status: false , message: ` ${address.pincode}  is not valid city pincode`})
             return
         }
         
@@ -132,7 +141,7 @@ try{
         return
     }
 
-    if(!validator.isValidEmail(email)) {
+    if(!validator.isValidEmail(email.trim())) {
         res.status(400).send({status: false , message: 'Email is invalid'})
         return
     }
@@ -142,7 +151,7 @@ try{
         return
     }
 
-    if(!validator.isValidPassword(password)){
+    if(!validator.isValidPassword(password.trim())){
         res.status(400).send({status: false , message:'It is not valid password'})
         return
     }

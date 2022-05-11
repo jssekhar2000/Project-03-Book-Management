@@ -10,7 +10,8 @@ let authentication = function (req , res , next){
     try {
 
         // taking encrypted token from header 
-        let token = req.headers['x-api-key'] 
+        //let token = req.headers['x-api-key'] 
+        let token = req.headers["x-api-key"] || req.headers["x-Api-Key"];
         
         // return this message if token is not present in headers
         if(!token) return res.status(403).send({message: "token must be present" })

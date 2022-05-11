@@ -1,3 +1,4 @@
+const { is } = require('express/lib/request');
 const bookModel = require('../models/bookModel');
 const userModel = require('../models/userModel')
 const validator = require('../validators/validator')
@@ -22,13 +23,13 @@ const createBook = async function (req, res) {
         }
 
         //userId = userId.trim()
-        if (! validator.isValidObjectId(userId)) {
+        if (! validator.isValidObjectId(userId.trim())) {
             return res.status(400).send({ status: false, message: 'Please enter valid user ID' });
         }
 
         // Authorization
       
-        if(userId != req.userId){
+        if(userId.trim() != req.userId){
             return res.status(401).send({status: false , message: "Unauthorized User"})
         }
 
@@ -36,7 +37,7 @@ const createBook = async function (req, res) {
             return res.status(400).send({ status: false, message: 'Title is Required' });
         }
 
-        if (! validator.isValid2(title)) {
+        if (! validator.isValid2(title.trim())) {
             return res.status(400).send({ status: false, message: 'Please Enter Valid title' });
         }
 
@@ -49,12 +50,12 @@ const createBook = async function (req, res) {
             return res.status(400).send({ status: false, message: 'Excerpt is Required' });
         }
 
-        if (! validator.isValid2(excerpt)) {
+        if (! validator.isValid2(excerpt.trim())) {
             return res.status(400).send({ status: false, message: 'Please enter valid excerpt' });
         }
 
 
-        // Check existing of UserId
+        // Check exist or not this UserId
         const isExistUserId = await userModel.findOne({ userId: userId });
         if (! isExistUserId) {
             return res.status(400).send({ status: false, message: "User ID is Not exists in our Database" })
@@ -65,7 +66,7 @@ const createBook = async function (req, res) {
         }
 
         
-        if (! validator.isValidISBN(ISBN)){
+        if (! validator.isValidISBN(ISBN.trim())){
             return res.status(400).send({ status: false, message: 'Please Enter a Valid ISBN' });
         }
 
@@ -79,7 +80,7 @@ const createBook = async function (req, res) {
             return res.status(400).send({ status: false, message: 'category is Required' });
         }
 
-        if ( !validator.isValid2(category)) {
+        if ( !validator.isValid2(category.trim())) {
             return res.status(400).send({ status: false, message: 'Please Enter a Valid Category' });
         }
 
@@ -116,18 +117,20 @@ const createBook = async function (req, res) {
         }
 
         
-        if (! validator.releaseFormat(releasedAt)) {
-            return res.status(400).send({ status: false, message: "Released Date Format Should be in 'YYYY-MM-DD' Format " });
+        if (! validator.releaseFormat(releasedAt.trim())) {
+            return res.status(400).send({ status: false, message: "Invalid Released Date " });
         }
 
         if (reviews && (typeof reviews !== 'number')) {
             return res.status(400).send({ status: false, message: "Reviews Must be numbers" })
         }
-
-        if(isDeleted === true){
-            return res.status(400).send({ status: false, message: "No Data Should Be Deleted At The Time Of Creation" })
+    
+        if(isDeleted && (isDeleted === true  || typeof isDeleted !== Boolean)){
+                return res.status(400).send({ status: false, message: "No Data Should Be Deleted At The Time Of Creation" })
         }
-
+        
+        
+       
         const bookDetails = await bookModel.create(data)
         return res.status(201).send({ status: true, message: 'successfully created ', data:  bookDetails  })
 
@@ -151,11 +154,13 @@ const getBookDetails = async function (req, res) {
             return res.status(400).send({ status: false, message: 'Please enter Valid User ID' });
         }
 
-        let user = await userModel.findById(userId)
-
-        if(!user){
-            return res.status(404).send({ status: false, message: 'User does not exist' })
+        if(userId) {
+            let user = await userModel.findById(userId)
+            if(!user){
+                return res.status(404).send({ status: false, message: 'User does not exist' })
+            }
         }
+        
 
         if ( category && ! validator.isValid2(category.toLowerCase().trim())) {
             return res.status(400).send({ status: false, message: 'Please Enter a Valid Category' });
@@ -203,7 +208,7 @@ const getBookDetailsByID = async function(req, res) {
         if(!book){
             return res.status(404).send({status: false, message: 'Book not Found'})
         }
-        let reviewsDetail = await reviewModel.find({bookId: bookID, isDeleted: false}).select({_id: 1, bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1})
+        let reviewsDetail = await reviewModel.find({bookId: bookID, isDeleted: false}).select({_id: 1, bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1}).lean()
 
         
         book['reviewsData'] = reviewsDetail
@@ -235,7 +240,7 @@ const updateBook = async function (req, res) {
         let userId = book.userId
        
         // Authorization
-        if(userId != req.userId){
+        if(userId.trim() != req.userId){
             return res.status(401).send({status: false , message: "Unauthorized User"})
         }
 

@@ -18,7 +18,24 @@ router.put("/books/:bookId", mw.authentication, bookController.updateBook)
 router.delete("/books/:bookId", mw.authentication, bookController.deleteBook)
 
 //Review APIs
-router.post("/books/:bookId/review", mw.authentication, reviewController.addReview )
+router.post("/books/:bookId/review", reviewController.addReview )
+router.put("/books/:bookId/review/:reviewId", reviewController.updateReview)
+router.delete("/books/:bookId/review/:reviewId", reviewController.deleteReview)
 
+
+router.post("*", (req,res) =>{
+    
+    return res.status(404).send({ msg:"Page Not Found"})
+})
+router.get("*", (req,res) =>{
+    return res.status(404).send({ msg:"Page Not Found"})
+})
+router.put("*", (req,res) =>{
+    return res.status(404).send({ msg:"Page Not Found"})
+})
+
+router.delete("*", (req,res) =>{
+    return res.status(404).send({ msg:"Page Not Found"})
+})
 
 module.exports = router;

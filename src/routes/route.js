@@ -17,7 +17,7 @@ router.get("/books/:bookId", mw.authentication, bookController.getBookDetailsByI
 router.put("/books/:bookId", mw.authentication, bookController.updateBook)
 router.delete("/books/:bookId", mw.authentication, bookController.deleteBook)
 
-
+//Review APIs
 router.post("/books/:bookId/review", mw.authentication, reviewController.addReview )
 
 

@@ -61,8 +61,17 @@ const isValidPhone = function(mobileNumber) {
   }
 
 
- const check = (value) => {
-    return value.every(ele => (typeof(ele) === "string"))
+//  const check = (value) => {
+//     return value.every(ele => (typeof(ele) === "string"))
+// }
+
+const check = (value) => {
+    let isStr =  value.every(ele => (typeof(ele) === "string"))
+    if(isStr == false) return false
+    let arr= value.map(x => x.trim())
+    let isEmptyStr = arr.includes('');
+    if(isEmptyStr == true) return false
+    return true
 }
 
 

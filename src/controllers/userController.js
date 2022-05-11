@@ -1,7 +1,7 @@
 const userModel = require('../models/userModel');
 const validator = require('../validators/validator')
 const jwt = require('jsonwebtoken');
-const { isValidObjectId } = require('mongoose');
+
 
 
 
@@ -104,7 +104,7 @@ const createUser = async function(req, res) {
         data = { title, name, phone, email, password, address }
 
         let userData = await userModel.create(data)
-        res.status(201).send({ status:true, message: 'Success', data:{userData} })
+        res.status(201).send({ status:true, message: 'Success', data: userData })
 
     } catch (error) {
         res.status(500).send({status:false , msg: error.message});
@@ -128,12 +128,12 @@ try{
     const { email , password } = data
 
     if(!validator.isValid(email)) {
-        res.status(400).send({status: false , message: 'Email number is required'})
+        res.status(400).send({status: false , message: 'Email is required'})
         return
     }
 
     if(!validator.isValidEmail(email)) {
-        res.status(400).send({status: false , message: 'Email number is invalid'})
+        res.status(400).send({status: false , message: 'Email is invalid'})
         return
     }
 
@@ -163,7 +163,7 @@ try{
                  "functionUp-Uranium" 
                  )
                  res.header("x-api-key" , token)
-                 res.status(200).send({status:true , msg:"login Success" , data:{token} })
+                 res.status(200).send({status:true , msg:"login Success" , data: token })
      }
 }
 catch(error){

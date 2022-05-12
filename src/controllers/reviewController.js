@@ -42,7 +42,7 @@ const addReview = async function (req, res) {
         // if(!validator.isValid(reviewedBy)){
         //     data.reviewedBy = 'Guest'
         // }
-        if(!validator.isValid(rating)){
+        if(!validator.isValid(reviewedBy)){
             return res.status(400).send({ status: false, message: 'Reviewer Name is Required' });
         }
 

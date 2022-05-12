@@ -3,6 +3,7 @@ const bookModel = require('../models/bookModel');
 const userModel = require('../models/userModel')
 const validator = require('../validators/validator')
 
+//------------------------------------Add Review for book--------------------------
 
 const addReview = async function (req, res) {
 
@@ -25,7 +26,7 @@ const addReview = async function (req, res) {
             
         }
 
-        let {review, rating, reviewedBy } = data
+        let {review, rating, reviewedBy, isDeleted } = data
 
         if(review != undefined && !validator.isValid2(review.trim())) {
             return res.status(400).send({ status: false, message: 'Please enter valid review' });
@@ -47,6 +48,10 @@ const addReview = async function (req, res) {
             return res.status(400).send({ status: false, message: 'Please Enter valid Reviewer Name' }); 
        
         }
+
+        if(isDeleted && (isDeleted === true  || typeof isDeleted !== Boolean)){
+            return res.status(400).send({ status: false, message: "No Data Should Be Deleted At The Time Of Creation" })
+    }
         
         data.reviewedAt = new Date().toISOString()
 
@@ -134,7 +139,7 @@ const updateReview = async function(req,res){
     }
 }
 
-
+//--------------------------------------- Delete Review by ID
 
 const deleteReview = async function (req,res){
     try{

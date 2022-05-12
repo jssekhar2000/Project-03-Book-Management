@@ -126,7 +126,7 @@ const updateReview = async function(req,res){
             return res.status(400).send({ status: false, message: 'Please Enter valid Reviewer Name' })
         }
 
-        const update = await reviewModel.findOneAndUpdate({_id:reviewId}, updateData,{new:true})
+        const update = await reviewModel.findOneAndUpdate({_id:reviewId}, data,{new:true})
 
         const reviewsDetail = await reviewModel.find({bookId: bookId, isDeleted: false}).select({_id: 1, bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1}).lean()
 

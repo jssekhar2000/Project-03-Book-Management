@@ -61,7 +61,7 @@ const addReview = async function (req, res) {
         const updatedBook = await bookModel.findOneAndUpdate( condition , { $inc: {reviews: 1}}, {new: true}).lean()
 
         data.bookId = bookID
-        const reviewData = await reviewModel.create(data)
+        const newReview = await reviewModel.create(data)
 
         const reviewsDetail = await reviewModel.find({bookId: bookID, isDeleted: false}).select({_id: 1, bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1}).lean()
 

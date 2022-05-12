@@ -1,6 +1,5 @@
 const reviewModel = require('../models/reviewModel')
 const bookModel = require('../models/bookModel');
-const userModel = require('../models/userModel')
 const validator = require('../validators/validator')
 
 //------------------------------------Add Review for book--------------------------
@@ -36,15 +35,18 @@ const addReview = async function (req, res) {
             return res.status(400).send({ status: false, message: 'Rating is Required' });
         }
 
-        if((typeof rating != Number) || (rating > 5 || rating < 1)) {
+        if((typeof rating != "number") || (rating > 5 || rating < 1)) {
             return res.status(400).send({ status: false, message: 'Please Enter valid Rating' }); 
         }
 
         // if(!validator.isValid(reviewedBy)){
         //     data.reviewedBy = 'Guest'
         // }
+        if(!validator.isValid(rating)){
+            return res.status(400).send({ status: false, message: 'Reviewer Name is Required' });
+        }
 
-        if(reviewedBy != undefined &&  ! validator.isValid2(reviewedBy.trim())){
+        if(! validator.isValid2(reviewedBy.trim())){
             return res.status(400).send({ status: false, message: 'Please Enter valid Reviewer Name' }); 
        
         }
@@ -56,7 +58,7 @@ const addReview = async function (req, res) {
         data.reviewedAt = new Date().toISOString()
 
         const condition = {_id: bookID, isDeleted: false}
-        const updatedBook = await bookModel.findOneAndUpdate( condition , { $inc: {review: 1}}, {new: true}).lean()
+        const updatedBook = await bookModel.findOneAndUpdate( condition , { $inc: {reviews: 1}}, {new: true}).lean()
 
         data.bookId = bookID
         const reviewData = await reviewModel.create(data)

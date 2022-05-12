@@ -1,6 +1,7 @@
 const { is } = require('express/lib/request');
 const bookModel = require('../models/bookModel');
 const userModel = require('../models/userModel')
+const reviewModel = require('../models/reviewModel')
 const validator = require('../validators/validator')
 
 
@@ -148,7 +149,12 @@ const getBookDetails = async function (req, res) {
     try {
         let queryData = req.query
 
-        let {userId, category, subcategory} = queryData
+        let {userId, category, subcategory , ...remaining} = queryData
+
+        if(validator.isValidRequestBody(remaining)){
+            return res.status(400).send({status: false , message: "userId, category, subcategory --> only these filters are allowed"})
+        }
+
 
         if(userId && !validator.isValidObjectId(userId.trim())){
             return res.status(400).send({ status: false, message: 'Please enter Valid User ID' });
@@ -166,11 +172,9 @@ const getBookDetails = async function (req, res) {
             return res.status(400).send({ status: false, message: 'Please Enter a Valid Category' });
         }
 
-        
         if(subcategory){
             queryData.subcategory =   { $all: [].concat(req.query.subcategory) }
         }
-        
         //
 
         let condition = { isDeleted: false }
@@ -189,9 +193,8 @@ const getBookDetails = async function (req, res) {
         res.status(500).send({status:false , msg: err.message});
     }
 
-    
-
 }
+
 
 const getBookDetailsByID = async function(req, res) {
 
@@ -289,6 +292,9 @@ const updateBook = async function (req, res) {
         }
 
         let condition = {_id: bookID , isDeleted: false}
+
+        data = {title, excerpt, releasedAt, ISBN }
+
         // data = /*{ $or: [{ title: title }, { excerpt: excerpt }, { releasedAt: releasedAt }, { ISBN: ISBN }]}*/
         let updatedData = await bookModel.findOneAndUpdate( condition , {$set: data}, {new: true})
 

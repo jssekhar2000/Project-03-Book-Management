@@ -112,6 +112,10 @@ const updateReview = async function(req,res){
         
         const {review, rating, reviewedBy}  = data
 
+        if (!(review || rating || reviewedBy )) {
+            return res.status(400).send({ status: false, message: 'Wrong keys are Present, Please enter correct updation keys' });
+          }
+
         if(review != undefined && !validator.isValid2(review.trim())) {
             return res.status(400).send({ status: false, message: 'Please enter valid review' });
         }
@@ -126,7 +130,9 @@ const updateReview = async function(req,res){
             return res.status(400).send({ status: false, message: 'Please Enter valid Reviewer Name' })
         }
 
-        const update = await reviewModel.findOneAndUpdate({_id:reviewId}, data,{new:true})
+        data = { review, rating, reviewedBy}
+
+        const update = await reviewModel.findOneAndUpdate({_id:reviewId}, data, {new:true})
 
         const reviewsDetail = await reviewModel.find({bookId: bookId, isDeleted: false}).select({_id: 1, bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1}).lean()
 
@@ -168,7 +174,7 @@ const deleteReview = async function (req,res){
             return res.status(404).send({status:false,message:"review with this book id is does not exist"})
          }
 
-        let update = await reviewModel.findOneAndUpdate({_id:reviewId},{isDeleted:true},{new:true})
+        let update = await reviewModel.findOneAndUpdate({_id:reviewId}, {isDeleted:true}, {new:true})
         let updateReviewCount = await bookModel.findOneAndUpdate({_id:bookId},{reviews:checkBookId.reviews-1},{new:true})
 
          return res.status(200).send({status:true, message:"Review sucessfully Deleted"})

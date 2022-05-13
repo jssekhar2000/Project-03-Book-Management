@@ -182,7 +182,7 @@ const getBookDetails = async function (req, res) {
 
          
         let allBooks = await bookModel.find(data).collation({locale: 'en'}).sort({title: 1}).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1})
-        if(! allBooks){
+        if(! allBooks.length){
             return res.status(404).send({status: false , msg:"Book not found"})
         }
         return res.status(200).send({status: true ,message: 'Books list', data: allBooks})
@@ -206,7 +206,7 @@ const getBookDetailsByID = async function(req, res) {
             return res.status(400).send({ status: false, message: 'Please enter Valid Book-ID' });
         }
 
-        let book = await bookModel.findOne({_id: bookID, isDeleted: false}).lean()
+        let book = await bookModel.findOne({_id: bookID, isDeleted: false}).lean().select({__v: 0})
 
         if(!book){
             return res.status(404).send({status: false, message: 'Book not Found'})

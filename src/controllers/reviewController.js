@@ -58,14 +58,15 @@ const addReview = async function (req, res) {
         data.reviewedAt = new Date().toISOString()
 
         const condition = {_id: bookID, isDeleted: false}
-        const updatedBook = await bookModel.findOneAndUpdate( condition , { $inc: {reviews: 1}}, {new: true}).lean()
+        const updatedBook = await bookModel.findOneAndUpdate( condition , { $inc: {reviews: 1}}, {new: true}).lean().select({ __v: 0 })
 
         data.bookId = bookID
         const newReview = await reviewModel.create(data)
 
-        const reviewsDetail = await reviewModel.find({bookId: bookID, isDeleted: false}).select({_id: 1, bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1}).lean()
+       // const reviewsDetail = await reviewModel.find({bookId: bookID, isDeleted: false}).select({_id: 1, bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1}).lean()
+        // updatedBook['reviewsData'] = reviewsDetail
 
-        updatedBook['reviewsData'] = reviewsDetail
+        updatedBook['reviewsData'] = newReview
 
         return res.status(201).send({status: true , message: 'Books list', data: updatedBook})
 
@@ -98,7 +99,7 @@ const updateReview = async function(req,res){
             return res.status(400).send({status:false,message:`${reviewId} is not a valid review id id` })
         }
 
-        let checkBook = await bookModel.findOne({_id:bookId, isDeleted:false}).lean()
+        let checkBook = await bookModel.findOne({_id:bookId, isDeleted:false}).lean().select({ __v: 0 })
 
         if(!checkBook){
             return res.status(404).send({status:false,message:"Book does not exist in our Database" })
@@ -121,7 +122,7 @@ const updateReview = async function(req,res){
         }
 
      
-        if(rating && (( typeof rating != Number) || (rating > 5 || rating < 1))) {
+        if(rating && (( typeof rating != "number") || (rating > 5 || rating < 1))) {
             return res.status(400).send({ status: false, message: 'Please Enter valid Rating' }); 
         }
 
@@ -132,11 +133,13 @@ const updateReview = async function(req,res){
 
         data = { review, rating, reviewedBy}
 
-        const update = await reviewModel.findOneAndUpdate({_id:reviewId}, data, {new:true})
+        const update = await reviewModel.findOneAndUpdate({_id:reviewId}, data, {new:true}).select({ __v: 0 })
 
-        const reviewsDetail = await reviewModel.find({bookId: bookId, isDeleted: false}).select({_id: 1, bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1}).lean()
+       // const reviewsDetail = await reviewModel.find({bookId: bookId, isDeleted: false}).select({_id: 1, bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1}).lean()
 
-        checkBook['reviewsData'] = reviewsDetail
+       // checkBook['reviewsData'] = reviewsDetail
+
+        checkBook['reviewsData'] = update
 
         return res.status(201).send({status: true , message: 'Books list', data: checkBook})
       

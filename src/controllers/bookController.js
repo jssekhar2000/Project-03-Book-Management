@@ -30,7 +30,7 @@ const createBook = async function (req, res) {
 
         // Authorization
       
-        if(userId.trim() != req.userId){
+        if(userId != req.userId){
             return res.status(401).send({status: false , message: "Unauthorized User"})
         }
 
@@ -243,7 +243,7 @@ const updateBook = async function (req, res) {
         let userId = book.userId
        
         // Authorization
-        if(userId.trim() != req.userId){
+        if(userId != req.userId){
             return res.status(401).send({status: false , message: "Unauthorized User"})
         }
 

@@ -46,7 +46,7 @@ const isValidPhone = function(mobileNumber) {
  }
 
  const isValidPassword = function(pass){
-     let passRE = /^(?!\S*\s)(?=\D*\d)(?=.*[!@#$%^&*])(?=[^A-Z]*[A-Z]).{8,15}$/;
+     let passRE = /^(?!\S*\s)(?=\D*\d)(?=.*[!@#$%^&*])(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z]).{8,15}$/;
      return passRE.test(pass)
  }
 

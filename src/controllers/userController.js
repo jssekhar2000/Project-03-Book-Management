@@ -25,7 +25,7 @@ const createUser = async function(req, res) {
 
         }
 
-        if(!validator.isValidTitle(title.trim())) {
+        if(!validator.isValidTitle(title)) {
             res.status(400).send({status: false , message: 'Title Must be of these values [Mr, Mrs, Miss]'})
             return
         }
@@ -35,13 +35,13 @@ const createUser = async function(req, res) {
             return
         }
 
-        if(!validator.isValid2(name.trim())) {
+        if(!validator.isValid2(name)) {
             res.status(400).send({status: false , message: 'Name is not a valid name'})
             return
         }
         
         let validString = /\d/;
-        if(validString.test(name.trim())) 
+        if(validString.test(name)) 
             return res.status(400).send({ status: false, msg: "Name must be valid it should not contains numbers" });
 
 
@@ -51,7 +51,7 @@ const createUser = async function(req, res) {
 
         }
 
-        if(!validator.isValidPhone(phone.trim())) {
+        if( !validator.isValidPhone(phone)) {
             res.status(400).send({status: false , message: 'Phone number is not a valid'})
             return
 
@@ -68,7 +68,7 @@ const createUser = async function(req, res) {
             return
         }
 
-        if(!validator.isValidEmail(email.trim())) {
+        if(!validator.isValidEmail(email)) {
             res.status(400).send({status: false , message: 'Email is invalid'})
             return
         }
@@ -84,19 +84,19 @@ const createUser = async function(req, res) {
             return
         }
 
-        if(!validator.isValidPassword(password.trim())){
+        if(!validator.isValidPassword(password)){
             res.status(400).send({status: false , message:'It is not valid password'})
             return
         }
 
         
 
-        if(address.street && !validator.isValid2(address.street.trim())){
+        if(address.street && !validator.isValid2(address.street)){
             res.status(400).send({status: false , message: 'Enter a valid Street'})
             return
         }
 
-        if(address.city && !validator.isValid2(address.city.trim())){
+        if(address.city && !validator.isValid2(address.city)){
             res.status(400).send({status: false , message: 'Enter a valid city name'})
             return
         }
@@ -105,12 +105,12 @@ const createUser = async function(req, res) {
             return res.status(400).send({ status: false, msg: "City name must be valid it should not contains numbers" });
 
 
-        if(address.pincode && !validator.isValidPincode(address.pincode.trim())){
+        if(address.pincode && !validator.isValidPincode(address.pincode)){
             res.status(400).send({status: false , message: ` ${address.pincode}  is not valid city pincode`})
             return
         }
         
-        data = { title, name, phone, email, password, address }
+       // data = { title, name, phone, email, password, address }
 
         let userData = await userModel.create(data)
         res.status(201).send({ status:true, message: 'Success', data: userData })
@@ -130,7 +130,7 @@ try{
      let data = req.body
 
      if(!validator.isValidRequestBody(data)) {
-        res.status(400).send({status: false , Message: 'Invalid request parameters. Please provide intern details'})
+        res.status(400).send({status: false , Message: 'Invalid request parameters. Please provide User details'})
         return
     }
 
@@ -141,7 +141,7 @@ try{
         return
     }
 
-    if(!validator.isValidEmail(email.trim())) {
+    if(!validator.isValidEmail(email)) {
         res.status(400).send({status: false , message: 'Email is invalid'})
         return
     }
@@ -151,7 +151,7 @@ try{
         return
     }
 
-    if(!validator.isValidPassword(password.trim())){
+    if(!validator.isValidPassword(password)){
         res.status(400).send({status: false , message:'It is not valid password'})
         return
     }

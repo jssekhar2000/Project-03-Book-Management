@@ -11,6 +11,8 @@ const createBook = async function (req, res) {
     try {
         
         let data = req.body
+       
+
 
         if(!validator.isValidRequestBody(data)) {
             return res.status(400).send({status: false , Message: 'Invalid request parameters. Please provide Book details'})
@@ -24,7 +26,7 @@ const createBook = async function (req, res) {
         }
 
         //userId = userId.trim()
-        if (! validator.isValidObjectId(userId.trim())) {
+        if (! validator.isValidObjectId(userId)) {
             return res.status(400).send({ status: false, message: 'Please enter valid user ID' });
         }
 
@@ -38,7 +40,7 @@ const createBook = async function (req, res) {
             return res.status(400).send({ status: false, message: 'Title is Required' });
         }
 
-        if (! validator.isValid2(title.trim())) {
+        if (! validator.isValid2(title)) {
             return res.status(400).send({ status: false, message: 'Please Enter Valid title' });
         }
 
@@ -51,7 +53,7 @@ const createBook = async function (req, res) {
             return res.status(400).send({ status: false, message: 'Excerpt is Required' });
         }
 
-        if (! validator.isValid2(excerpt.trim())) {
+        if (! validator.isValid2(excerpt)) {
             return res.status(400).send({ status: false, message: 'Please enter valid excerpt' });
         }
 
@@ -67,7 +69,7 @@ const createBook = async function (req, res) {
         }
 
         
-        if (! validator.isValidISBN(ISBN.trim())){
+        if (! validator.isValidISBN(ISBN)){
             return res.status(400).send({ status: false, message: 'Please Enter a Valid ISBN' });
         }
 
@@ -81,7 +83,7 @@ const createBook = async function (req, res) {
             return res.status(400).send({ status: false, message: 'category is Required' });
         }
 
-        if ( !validator.isValid2(category.trim())) {
+        if ( !validator.isValid2(category)) {
             return res.status(400).send({ status: false, message: 'Please Enter a Valid Category' });
         }
 
@@ -118,7 +120,7 @@ const createBook = async function (req, res) {
         }
 
         
-        if (! validator.releaseFormat(releasedAt.trim())) {
+        if (! validator.releaseFormat(releasedAt)) {
             return res.status(400).send({ status: false, message: "Invalid Released Date " });
         }
 
@@ -321,7 +323,7 @@ const deleteBook = async function (req, res) {
             return res.status(400).send({ status: false, message: 'Please enter Valid Book-ID' });
         }
 
-        let book = await bookModel.findOne({_id: bookID, isDeleted: false}).lean()
+        let book = await bookModel.findOne({_id: bookID, isDeleted: false})
         if(!book ){
             return res.status(404).send({status: false, message: 'Book not Found'})
         }

@@ -27,7 +27,7 @@ const addReview = async function (req, res) {
 
         let {review, rating, reviewedBy, isDeleted } = data
 
-        if(review != undefined && !validator.isValid2(review.trim())) {
+        if(review != undefined && !validator.isValid2(review)) {
             return res.status(400).send({ status: false, message: 'Please enter valid review' });
         }
 
@@ -46,7 +46,7 @@ const addReview = async function (req, res) {
             return res.status(400).send({ status: false, message: 'Reviewer Name is Required' });
         }
 
-        if(! validator.isValid2(reviewedBy.trim())){
+        if(! validator.isValid2(reviewedBy)){
             return res.status(400).send({ status: false, message: 'Please Enter valid Reviewer Name' }); 
        
         }
@@ -117,7 +117,7 @@ const updateReview = async function(req,res){
             return res.status(400).send({ status: false, message: 'Wrong keys are Present, Please enter correct updation keys' });
           }
 
-        if(review != undefined && !validator.isValid2(review.trim())) {
+        if(review != undefined && !validator.isValid2(review)) {
             return res.status(400).send({ status: false, message: 'Please enter valid review' });
         }
 
@@ -127,7 +127,7 @@ const updateReview = async function(req,res){
         }
 
 
-        if(reviewedBy != undefined &&  ! validator.isValid2(reviewedBy.trim())){
+        if(reviewedBy != undefined &&  ! validator.isValid2(reviewedBy)){
             return res.status(400).send({ status: false, message: 'Please Enter valid Reviewer Name' })
         }
 
@@ -141,7 +141,7 @@ const updateReview = async function(req,res){
 
         checkBook['reviewsData'] = update
 
-        return res.status(201).send({status: true , message: 'Books list', data: checkBook})
+        return res.status(200).send({status: true , message: 'Books list', data: checkBook})
       
             //{...checkBook , reviewsDetail}
     }

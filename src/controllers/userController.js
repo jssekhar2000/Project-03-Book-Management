@@ -13,7 +13,7 @@ const createUser = async function(req, res) {
         let data = req.body
      
         if(!validator.isValidRequestBody(data)) {
-            res.status(400).send({status: false , Message: 'Invalid request parameters. Please provide User details'})
+            res.status(400).send({status: false , message: 'Invalid request parameters. Please provide User details'})
             return
         }
 
@@ -160,7 +160,7 @@ try{
         let user = await userModel.findOne({email: email , password: password})
          
         if(!user){
-           return  res.status(400).send({status:false,msg:"Invalid Email or Password"})
+           return  res.status(404).send({status:false,msg:"Email or password does not match"})
         }
 
          let token = jwt.sign(

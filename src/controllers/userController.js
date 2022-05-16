@@ -88,8 +88,11 @@ const createUser = async function(req, res) {
             res.status(400).send({status: false , message:'It is not valid password'})
             return
         }
-
-        
+    
+        if (address &&  Array.isArray(address) || typeof(address) === 'string' ){
+            res.status(400).send({status: false , message: 'Enter Address in correct format'})
+            return
+        }
 
         if(address.street && !validator.isValid2(address.street)){
             res.status(400).send({status: false , message: 'Enter a valid Street'})
@@ -101,7 +104,7 @@ const createUser = async function(req, res) {
             return
         }
 
-        if(validString.test(address.city.trim())) 
+        if(validString.test(address.city)) 
             return res.status(400).send({ status: false, msg: "City name must be valid it should not contains numbers" });
 
 
